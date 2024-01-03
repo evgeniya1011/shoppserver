@@ -1,4 +1,4 @@
-from pydantic import BaseModel, EmailStr, field_validator
+from pydantic import BaseModel, EmailStr, field_validator, model_validator
 import re
 
 
@@ -21,12 +21,13 @@ class UserRegistration(BaseModel):
             raise ValueError('Неверный формат пароля')
         return value
 
-    @field_validator('password_confirmation')
-    def validate_password_confirmation(cls, value, **values):
-        print(values)
-        if "password" in values and value != values["password"]:
-            raise ValueError("Пароли не совпадают")
-        return value
+    @model_validator(mode='before')
+    def validate_password_confirmation(cls, values):
+        password = values.get('password')
+        password_confirmation = values.get('password_confirmation')
+        if password != password_confirmation:
+            raise ValueError('Пароли не совпадают')
+        return values
 
 
 class UserLogin(BaseModel):
