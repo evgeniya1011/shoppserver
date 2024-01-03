@@ -1,3 +1,5 @@
+import os
+
 from fastapi import FastAPI
 from tortoise.contrib.fastapi import register_tortoise
 from app.routers.auth import auth_router
@@ -5,12 +7,16 @@ from app.routers.products import product_router
 from database import init, close
 
 app = FastAPI()
+DB_USERNAME = os.getenv('DB_USERNAME')
+DB_PASSWORD = os.getenv('DB_PASSWORD')
+DB_HOST = os.getenv('DB_HOST')
+DB_NAME = os.getenv('DB_NAME')
 
 
 #запуск
 register_tortoise(
     app,
-    # db_url="postgres://{username}:{password}@{host}:{port}/{database}",
+    # db_url="postgres://DB_USERNAME:DB_PASSWORD@localhost:5432/DB_NAME",
     db_url="postgres://postgres:azuhin56@localhost:5432/shop",
     modules={"models": ["app.models"]},
     generate_schemas=True,

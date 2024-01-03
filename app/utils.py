@@ -1,3 +1,5 @@
+import os
+import dotenv
 from jose import JWTError, jwt
 from fastapi import HTTPException, Depends
 from fastapi.security import OAuth2PasswordBearer
@@ -10,7 +12,9 @@ from tortoise.contrib.fastapi import HTTPNotFoundError
 
 from app.models import User
 
-SECRET_KEY = 'tortoise-insecure-=fe_8pua(0pwri+^hks!n0vlsgv@$#p3el)ppg#=dt-m3d4!98'
+dotenv.load_dotenv()
+
+SECRET_KEY = os.getenv('SECRET_KEY')
 
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
