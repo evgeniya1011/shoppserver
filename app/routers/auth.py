@@ -27,6 +27,6 @@ async def login_user(user: UserLogin):
             detail="Invalid credentials",
             headers={"WWW-Authenticate": "Bearer"},
             )
-    token_data = {"sub": authenticated_user.id}
+    token_data = {"sub": str(authenticated_user.id)}
     token = await create_jwt_token(token_data)
     return {"access_token": token, "token_type": "bearer"}

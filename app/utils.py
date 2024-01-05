@@ -1,5 +1,5 @@
 import os
-import dotenv
+from dotenv import load_dotenv
 from jose import JWTError, jwt
 from fastapi import HTTPException, Depends
 from fastapi.security import OAuth2PasswordBearer
@@ -9,12 +9,17 @@ from passlib.context import CryptContext
 from starlette import status
 from tortoise import Tortoise
 from tortoise.contrib.fastapi import HTTPNotFoundError
+from pathlib import Path
 
 from app.models import User
+import dotenv
 
-dotenv.load_dotenv()
+from tortoise_config import SECRET_KEY
 
-SECRET_KEY = os.getenv('SECRET_KEY')
+# dotenv.load_dotenv()
+# BASE_DIR = Path(__file__).resolve().parent.parent
+#
+# SECRET_KEY = os.getenv('SECRET_KEY')
 
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
