@@ -17,7 +17,8 @@ class UserRegistration(BaseModel):
 
     @field_validator('password')
     def validate_password(cls, value):
-        if len(value) < 8 or not any(char.isupper() for char in value) or not any(char in '$%&!:' for char in value):
+        if (len(value) < 8 or not any(char.isupper() for char in value) or
+                not any(char in '$%&!:' for char in value)):
             raise ValueError('Неверный формат пароля')
         return value
 
