@@ -8,14 +8,25 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv('SECRET_KEY')
 
 DATABASE_URL = os.getenv('DATABASE_URL')
+DATABASE_URL_TEST = os.getenv('DATABASE_URL_TEST')
 
-
-#
-# database = Database(DATABASE_URL)
 
 TORTOISE_ORM = {
     "connections": {
-        "default": DATABASE_URL  #"postgres://postgres:azuhin56@localhost:5432/shop"
+        "default": DATABASE_URL
+    },
+    "apps": {
+        "models": {
+            "models": ["app.models", "aerich.models"],
+            "default_connection": "default",
+        },
+    },
+}
+
+
+TORTOISE_ORM_TEST = {
+    "connections": {
+        "default": DATABASE_URL_TEST
     },
     "apps": {
         "models": {
