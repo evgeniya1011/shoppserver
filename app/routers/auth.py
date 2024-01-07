@@ -9,6 +9,7 @@ auth_router = APIRouter()
 
 @auth_router.post("/register", response_model=UserPydantic)
 async def register(user: UserRegistration):
+    """Регистрация пользователя"""
     hashed_password = pwd_context.hash(user.password)
     user_data = user.model_dump()
     user_data['password'] = hashed_password
@@ -20,8 +21,15 @@ async def register(user: UserRegistration):
 @auth_router.post('/login', response_model=dict)
 async def login_user(user: UserLogin):
     """Авторизация пользователя"""
-    authenticated_user = await User.get(email=user.email_phone_number)
-    if authenticated_user is None or not pwd_context.verify(user.password, authenticated_user.password):
+    email_phone_number = user.email_phone_number
+    if '@' in email_phone_number:
+        authenticated_user = await User.get(email=user.email_phone_number)
+    else:
+        authenticated_user = await User.get(phone_number=user.email_phone_number)
+
+    if (authenticated_user is None or
+            not pwd_context.verify(user.password,
+                                   authenticated_user.password)):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Invalid credentials",
